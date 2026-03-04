@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.414882352941177,
+        "y": 1.6722268907563023
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.110008403361345,
+        "y": 2.388680672268907
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.570394957983194,
+        "y": 3.3261680672268903
+      },
+      "prevControl": {
+        "x": 2.77464705882353,
+        "y": 3.3261680672268903
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -0.221789006457527
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Human Side Simple",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 63.289158350002815
+  },
+  "useDefaultConstraints": true
+}

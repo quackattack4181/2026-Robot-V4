@@ -1,0 +1,56 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HP 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "runIntakePivotOut"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runPause5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HP 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runShooterOn"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runDriveToClimbSetupRight"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

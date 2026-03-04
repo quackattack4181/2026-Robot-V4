@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.430126050420169,
+        "y": 6.595941176470588
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.201470588235295,
+        "y": 5.681319327731092
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5475294117647063,
+        "y": 4.17981512605042
+      },
+      "prevControl": {
+        "x": 2.6984285714285723,
+        "y": 4.164571428571429
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -0.4766593817530942
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Depot Side Simple",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -61.0816519568137
+  },
+  "useDefaultConstraints": true
+}
