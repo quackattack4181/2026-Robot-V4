@@ -57,6 +57,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+  private static final LimelightHelpers.RawFiducial[] EMPTY_FIDUCIALS = new LimelightHelpers.RawFiducial[0];
 
   /**
    * PhotonVision class to keep an accurate odometry.
@@ -73,10 +74,12 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Limelight aim controller reused to avoid resource warnings.
    */
-  private final PIDController limelightAimController = new PIDController(Constants.VisionConstants.AIM_KP,
-                                                                         Constants.VisionConstants.AIM_KI,
-                                                                         Constants.VisionConstants.AIM_KD);
-  private final PIDController headingController = new PIDController(0.02, 0.0, 0.001);
+  private final PIDController limelightAimController = new PIDController(Constants.CalibrationConstants.SWERVE_AIM_KP,
+                                                                         Constants.CalibrationConstants.SWERVE_AIM_KI,
+                                                                         Constants.CalibrationConstants.SWERVE_AIM_KD);
+  private final PIDController headingController = new PIDController(Constants.CalibrationConstants.SWERVE_HEADING_KP,
+                                                                    Constants.CalibrationConstants.SWERVE_HEADING_KI,
+                                                                    Constants.CalibrationConstants.SWERVE_HEADING_KD);
   /**
    * Enable vision odometry updates while driving.
    */
@@ -181,6 +184,16 @@ public class SwerveSubsystem extends SubsystemBase
     // vision = new Vision(swerveDrive::getPose, swerveDrive.field);
   }
 
+
+  public void setHeadingPid(double kp, double ki, double kd)
+  {
+    headingController.setPID(kp, ki, kd);
+  }
+
+  public void setLimelightAimPid(double kp, double ki, double kd)
+  {
+    limelightAimController.setPID(kp, ki, kd);
+  }
   @Override
   public void periodic()
   {
@@ -229,10 +242,10 @@ public class SwerveSubsystem extends SubsystemBase
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                         AutonConstants.TRANSLATION_PID,
-                                         // Translation PID constants
-                                         AutonConstants.ANGLE_PID,
-                                         // Rotation PID constants
+                                         AutonConstants.PATH_TRANSLATION_PID,
+                                         // Autonomous path translation PID constants
+                                         AutonConstants.PATH_ANGLE_PID,
+                                         // Autonomous path rotation PID constants
                                          4.5
         ), config,
         () -> {
@@ -519,6 +532,12 @@ public class SwerveSubsystem extends SubsystemBase
     return isTagInList(tagId, Constants.VisionConstants.ALLOWED_AIM_TAG_IDS);
   }
 
+  private LimelightHelpers.RawFiducial[] getSafeRawFiducials(String limelightName)
+  {
+    LimelightHelpers.RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(limelightName);
+    return fiducials != null ? fiducials : EMPTY_FIDUCIALS;
+  }
+
   public boolean isNearLimelightSnapshot(String limelightName,
                                         int[] allowedTagIds,
                                         double targetTx,
@@ -563,7 +582,7 @@ public class SwerveSubsystem extends SubsystemBase
       return false;
     }
 
-    LimelightHelpers.RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(limelightName);
+    LimelightHelpers.RawFiducial[] fiducials = getSafeRawFiducials(limelightName);
     for (LimelightHelpers.RawFiducial fiducial : fiducials)
     {
       if (isTagInList(fiducial.id, allowedTagIds))
@@ -588,7 +607,7 @@ public class SwerveSubsystem extends SubsystemBase
       return Double.NaN;
     }
 
-    LimelightHelpers.RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(limelightName);
+    LimelightHelpers.RawFiducial[] fiducials = getSafeRawFiducials(limelightName);
 
     double txSum = 0.0;
     int count = 0;
@@ -618,7 +637,7 @@ public class SwerveSubsystem extends SubsystemBase
       return Double.NaN;
     }
 
-    LimelightHelpers.RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(limelightName);
+    LimelightHelpers.RawFiducial[] fiducials = getSafeRawFiducials(limelightName);
     double txSum = 0.0;
     int count = 0;
 
@@ -958,7 +977,7 @@ public class SwerveSubsystem extends SubsystemBase
       return Double.NaN;
     }
 
-    LimelightHelpers.RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(limelightName);
+    LimelightHelpers.RawFiducial[] fiducials = getSafeRawFiducials(limelightName);
     double distanceSumMeters = 0.0;
     int allowedCount = 0;
 

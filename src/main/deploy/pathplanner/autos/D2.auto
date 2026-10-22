@@ -17,13 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntakePivotOut"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "runIntakeWheelsOn"
+                  "name": "runIntakeDown"
                 }
               }
             ]
@@ -42,22 +36,34 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntakePivotIn"
+                  "name": "runIntakeUp"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "runShooterOn"
+            "pathName": "Depot 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot 4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "runDriveToClimbSetupLeft"
+            "name": "runShoot5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runBackup6Inches"
           }
         }
       ]

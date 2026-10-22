@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "runShooterOn"
+            "name": "runShoot5"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "runIntakePivotOut"
+            "name": "runIntakeDown"
           }
         },
         {
@@ -30,12 +30,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "DSP-2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "runIntakeWheelsOn"
                 }
               }
             ]
@@ -50,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "runShooterOn"
+            "name": "runShoot5"
           }
         }
       ]

@@ -11,13 +11,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HP 1"
+                  "pathName": "H5-1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "runIntakePivotOut"
+                  "name": "runIntakeDown"
                 }
               }
             ]
@@ -32,19 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP 2"
+            "pathName": "H5-2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "runShooterOn"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runDriveToClimbSetupRight"
+            "name": "runShoot5"
           }
         }
       ]

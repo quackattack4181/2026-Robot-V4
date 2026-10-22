@@ -13,13 +13,25 @@
         {
           "type": "named",
           "data": {
-            "name": "runShooterOn"
+            "name": "runShoot5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "runDriveClimbSetupLeft"
+            "name": "runClimberDownPosition"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runBackup6Inches"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "runClimberLevel1Position"
           }
         }
       ]

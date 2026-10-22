@@ -33,8 +33,14 @@ public final class Constants
   public static final class AutonConstants
   {
 
-   public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
+    // PathPlanner autonomous path-following PID values.
+    // Keep these independent from teleop driver-feel tuning.
+    public static final PIDConstants PATH_TRANSLATION_PID = new PIDConstants(0.7, 0, 0.0); // new PIDConstants(1.15, 0, 0.0);
+    public static final PIDConstants PATH_ANGLE_PID       = new PIDConstants(0.4, 0, 0.01); //new PIDConstants(7.0, 0.0, 0.0);
+
+    // Legacy aliases kept for compatibility in existing references.
+    public static final PIDConstants TRANSLATION_PID = PATH_TRANSLATION_PID;
+    public static final PIDConstants ANGLE_PID       = PATH_ANGLE_PID;
   }
 
   public static final class DrivebaseConstants
@@ -69,15 +75,47 @@ public final class Constants
     public static final int[] ALLOWED_AIM_TAG_IDS = SHOOTING_AIM_TAG_IDS;
     public static final int[] CLIMBER_APPROVED_TAG_IDS = {10, 26, 12};
     // Linear calibration for Limelight distance inches: calibrated = raw * scale + offset.
-    // Defaults fit two tape-measure points: (raw 68.0 -> true 68.0), (raw 103.5 -> true 105.0).
+    // Offset is currently adjusted for camera relocation (~15 in forward, ~7 in upward).
     public static final double LIMELIGHT_DISTANCE_SCALE = 1.0422535;
-    public static final double LIMELIGHT_DISTANCE_OFFSET_INCHES = 0.0;
+    public static final double LIMELIGHT_DISTANCE_OFFSET_INCHES = 15.0;
   }
   public static class CustomConstants
   {
 
 
   }
+
+
+  public static final class CalibrationConstants
+  {
+    // Master switch for live tuning from Elastic dashboard.
+    public static final boolean ROBOT_CALIBRATION_MODE_ENABLED = false;
+
+    // Swerve heading PID (used by rotate commands).
+    public static final double SWERVE_HEADING_KP = 0.02;
+    public static final double SWERVE_HEADING_KI = 0.0;
+    public static final double SWERVE_HEADING_KD = 0.001;
+
+    // Swerve limelight-aim PID (used by tag-aim command).
+    public static final double SWERVE_AIM_KP = VisionConstants.AIM_KP;
+    public static final double SWERVE_AIM_KI = VisionConstants.AIM_KI;
+    public static final double SWERVE_AIM_KD = VisionConstants.AIM_KD;
+
+    // Shooter PID/F tuning values published to Elastic for live tuning.
+    public static final double SHOOTER_KP = ShooterConstants.SHOOTER_KP;
+    public static final double SHOOTER_KI = ShooterConstants.SHOOTER_KI;
+    public static final double SHOOTER_KD = ShooterConstants.SHOOTER_KD;
+    public static final double SHOOTER_KF = ShooterConstants.SHOOTER_KF;
+
+    // Teleop swerve tuning (driver feel).
+    public static final double TELEOP_TRANSLATION_SCALE = 1.0;
+    public static final double TELEOP_STRAFE_SCALE = 1.0;
+    public static final double TELEOP_ROTATION_SCALE = 1.0;
+    public static final double TELEOP_LEFT_X_DEADBAND = OperatorConstants.LEFT_X_DEADBAND;
+    public static final double TELEOP_LEFT_Y_DEADBAND = OperatorConstants.LEFT_Y_DEADBAND;
+    public static final double TELEOP_RIGHT_X_DEADBAND = OperatorConstants.RIGHT_X_DEADBAND;
+  }
+
 
   public static final class ClimbSetupConstants
   {
@@ -123,6 +161,7 @@ public final class Constants
     public static final double LIMELIGHT_TY_TOLERANCE_DEGREES = 1.5;
     public static final double LIMELIGHT_TA_TOLERANCE_PERCENT = 0.10;
     // Driver test-mode lineup behavior for X/B climb buttons.
+    // X/B test-lineup target distance from tag.
     public static final double TAG_LINEUP_X_TARGET_DISTANCE_FEET = 7.75;
     public static final double TAG_LINEUP_X_LATERAL_OFFSET_INCHES = -12.0;
     public static final double TAG_LINEUP_B_LATERAL_OFFSET_INCHES =
@@ -141,25 +180,34 @@ public final class Constants
   {
     public static final int SHOOTER_INTAKE_MOTOR_ID = 20;
     public static final int MIDDLE_SHOOTER_MOTOR_ID = 21;
+    public static final int SECOND_SHOOTER_MOTOR_ID = 22;
 
-    public static final boolean SHOOTER_INTAKE_INVERTED = true;
+    public static final boolean SHOOTER_INTAKE_INVERTED = false;
     public static final boolean MIDDLE_SHOOTER_INVERTED = true;
+    public static final boolean SECOND_SHOOTER_INVERTED = !MIDDLE_SHOOTER_INVERTED;
 
     public static final int CURRENT_LIMIT_AMPS = 40;
     public static final int SPARKFLEX_CURRENT_LIMIT_AMPS = 80;
     public static final double SHOOTER_INTAKE_POWER = 0.99;
-    public static final double SHOOTER_CAL_POINT_NEAR_DISTANCE_FEET = 6.15;
-    public static final double SHOOTER_CAL_POINT_NEAR_POWER = 0.465;
+    public static final double SHOOTER_CAL_POINT_NEAR_DISTANCE_FEET = 4.8;
+    public static final double SHOOTER_CAL_POINT_NEAR_POWER = 0.48;
     public static final double SHOOTER_CAL_POINT_MID_DISTANCE_FEET = 7.75;
-    public static final double SHOOTER_CAL_POINT_MID_POWER = 0.485;
-    public static final double SHOOTER_CAL_POINT_FAR_DISTANCE_FEET = 8.34;
-    public static final double SHOOTER_CAL_POINT_FAR_POWER = 0.525;
-    public static final double SHOOTER_POWER_NO_TAG_DEFAULT = 0.65;
-    public static final boolean SHOOTER_CALIBRATION_MODE_ENABLED = false;
+    public static final double SHOOTER_CAL_POINT_MID_POWER = 0.54;
+    public static final double SHOOTER_CAL_POINT_FAR_DISTANCE_FEET = 9.0;
+    public static final double SHOOTER_CAL_POINT_FAR_POWER = 0.63;
+    public static final double SHOOTER_POWER_NO_TAG_DEFAULT = 0.52;
+    // Fixed shooter power modes for driver bumpers (independent of Limelight distance).
+    public static final double SHOOTER_FIXED_POWER_DRIVER = 0.90;
+    public static final double SHOOTER_FIXED_POWER_DRIVER_LOW = 0.50;
+    // If true, keep flywheel running at default power when not overridden by driver controls.
+    public static final boolean SHOOTER_ALWAYS_ON_ENABLED = true;
+    public static final double SHOOTER_ALWAYS_ON_DEFAULT_POWER = SHOOTER_FIXED_POWER_DRIVER_LOW;
+    public static final boolean SHOOTER_CALIBRATION_MODE_ENABLED = false; // legacy; use CalibrationConstants.ROBOT_CALIBRATION_MODE_ENABLED
     public static final double SHOOTER_CALIBRATION_DEFAULT_POWER = 0.40;
     public static final double SHOOTER_POWER_TOLERANCE = 0.02;
-    public static final double SHOOTER_INTAKE_START_DELAY_SECONDS = 2;
+    public static final double SHOOTER_INTAKE_START_DELAY_SECONDS = 0.10;
 
+    // OLD (currently unused): legacy shooter PID/F feedforward placeholders.
     public static final double SHOOTER_KP = 0.00003;
     public static final double SHOOTER_KI = 0.0;
     public static final double SHOOTER_KD = 0.0001;
@@ -172,6 +220,7 @@ public final class Constants
     public static final boolean AGITATOR_ENABLED = true;
     public static final double AGITATOR_POWER = 1.0;
 
+    // OLD (currently unused): legacy intake PID/F placeholders for shooter feed motor.
     public static final double SHOOTER_INTAKE_KP = 1.0;
     public static final double SHOOTER_INTAKE_KI = 0.0;
     public static final double SHOOTER_INTAKE_KD = 0.0;
@@ -190,13 +239,22 @@ public final class Constants
     public static final double MAX_ALLOWED_POWER = 1.00;
     public static final double CLIMBER_POWER = 0.95;
     // Absolute encoder offset in degrees. Set this so your chosen climber zero reads 0.0.
-    public static final double CLIMBER_ABSOLUTE_ENCODER_OFFSET_DEGREES = -147.8;
+    // Current tuned offset. OLD previous tuned value kept for reference after // .
+    public static final double CLIMBER_ABSOLUTE_ENCODER_OFFSET_DEGREES = -47.0;// 19.12;
     // If true, flip encoder sign so climber angle increases/decreases opposite direction.
-    public static final boolean CLIMBER_ENCODER_DIRECTION_INVERTED = false;
-    public static final boolean CLIMBER_LIMITS_ENABLED = false;
+    public static final boolean CLIMBER_ENCODER_DIRECTION_INVERTED = true;
+    public static final boolean CLIMBER_LIMITS_ENABLED = true;                               // Climber Limits
     // Manual climber soft limits after offset/inversion are applied.
-    public static final double FORWARD_MAX_ANGLE_DEGREES = 20.0;
-    public static final double BACKWARD_MAX_ANGLE_DEGREES = -120.0;
+    public static final double FORWARD_MAX_ANGLE_DEGREES = 10.0;
+    public static final double BACKWARD_MAX_ANGLE_DEGREES = -135.0;
+
+    // Preset climber positions in offset-adjusted degrees.
+    public static final double CLIMBER_DOWN_POSITION_DEGREES = -125.0;
+    public static final double CLIMBER_LEVEL_1_POSITION_DEGREES = 7.0;
+    public static final double CLIMBER_LEVEL_2_POSITION_DEGREES = -27.8; 
+    public static final double CLIMBER_POSITION_TOLERANCE_DEGREES = 1.0;
+    public static final double CLIMBER_POSITION_KP = 0.03;
+    public static final double CLIMBER_POSITION_TIMEOUT_SECONDS = 2.5;
   }
 
   public static final class IntakeConstants
@@ -216,8 +274,13 @@ public final class Constants
     // Manual soft limits (degrees) after applying offset.
     // Typical setup requested: inward = 0.0, outward = positive value.
     public static final double PIVOT_MAX_INWARD_ANGLE = 0.0;
-    public static final double PIVOT_MAX_OUTWARD_ANGLE = 90.0;
+    public static final double PIVOT_MAX_OUTWARD_ANGLE = 96.0;
     public static final double PIVOT_ANGLE_TOLERANCE_DEGREES = 0.5;
-    public static final double WHEEL_POWER = 0.80;
+    public static final double WHEEL_POWER = 0.99;
+    // If true, keep intake wheels running in teleop unless overridden/toggled off.
+    public static final boolean INTAKE_WHEELS_ALWAYS_ON_ENABLED = true;
+    public static final double INTAKE_WHEELS_ALWAYS_ON_POWER = WHEEL_POWER;
+    // Only run intake wheels always-on once pivot is past this angle (offset-adjusted degrees).
+    public static final double INTAKE_WHEELS_ALWAYS_ON_MIN_PIVOT_ANGLE_DEGREES = 50.0;
   }
 }
